@@ -128,9 +128,14 @@ body, html {
   justify-content: flex-start;
   align-items: center;
   width: 100%;
-  padding: 20px;
+  padding: 20px 20px 20px 40px;
   max-height: 40px;
   min-height: 40px;
+}
+.headerMenuItem {
+  transition: all .3s;
+  text-decoration: none;
+  color: #333;
 }
 .headerMenuItem:not(:first-child) {
   margin-left: 20px !important;
@@ -140,6 +145,17 @@ body, html {
   max-width: 100%;
   min-height: 150px;
   max-height: 150px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  position: relative;
+  left: 0;
+  background-color: #e0cba6;
+  padding-left: 20px;
+  max-width: 99%;
+  color: #333;
+  border-radius: 20px 0 0 20px;
 }
 .bodyContainer {
   display: flex;
@@ -150,6 +166,17 @@ body, html {
 	display: flex;
 	flex-direction: column;
 	max-width: 40%;
+  padding-left: 20px;
+}
+.postBlock {
+  width: 100%;
+  padding: 2%;
+  transition: all .3s;
+}
+.postBlock.clickedPost {
+  width: 150%;
+  background-color: #333;
+  color: #fff;
 }
 
 

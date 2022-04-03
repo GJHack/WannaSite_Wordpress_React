@@ -1,14 +1,15 @@
 import React , { useEffect , useState } from 'react';
 
-const Posts = ({page, setPage}) => {
+const Posts = ({ siteUrl , page, setPage}) => {
 
   const [postsArray, setPostsArray] = useState(['false']);
+  const [clickedPost, setClickedPost] = useState('');
 
   const getPosts = () => {
 
     let temp_posts = [];
 
-    fetch('/myBlogWp/wp-json/wp/v2/posts')
+    fetch(`${siteUrl}/wp-json/wp/v2/posts`)
 
       .then(response => response.json())
       .then(data => {
@@ -36,6 +37,7 @@ const Posts = ({page, setPage}) => {
   if(postsArray[0] == 'false') getPosts();
 
   useEffect(()=>{},[postsArray])
+  useEffect(() => {console.log(clickedPost)},[clickedPost])
 
   return(
     <>
@@ -43,10 +45,12 @@ const Posts = ({page, setPage}) => {
         {
           postsArray.map((item, index) => {
             return <Post
-                         key = {`keyPost_${index}`}
+                         checkID = {`keyPost_${item.id}`}
                          title = {item?.title?.rendered}
                          description = {item?.excerpt?.rendered}
                          content = {item?.content?.rendered}
+                         clickedPost = {clickedPost}
+                         setClickedPost = {setClickedPost}
                    />
           })
         }
@@ -56,12 +60,15 @@ const Posts = ({page, setPage}) => {
 
 }
 
-const Post = ({ key , description , title , content }) => {
+const Post = ({ clickedPost, setClickedPost , checkID , description , title , content }) => {
+
+  console.log(checkID)
+  useEffect(() => {console.log(clickedPost)},[clickedPost])
 
   return(
-    <article className = "postBlock">
+    <article className = {`postBlock ${(clickedPost === checkID)?'clickedPost':''}`} onClick = {(evt) => setClickedPost(checkID)}>
       <h2>{title}</h2>
-      <div dangerouslySetInnerHTML={{__html: description}}></div>
+      <div dangerouslySetInnerHTML={{__html: (clickedPost !== checkID)?description:content}}></div>
 
     </article>
   )

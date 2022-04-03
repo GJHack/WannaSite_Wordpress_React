@@ -11,10 +11,10 @@ function Main({}) {
   const [page, setPage] = useState('main')
   const [headMenu, setHeadMenu] = useState([{'title': 'menu'}])
 
-  const siteUrl = 'http://localhost/myBlogWp/'
+  const siteUrl = 'http://localhost/myBlogWp/' //Меняем на свой URL либо если на хостинге ставим тупо "/"
 
 
-  if(headMenu[0].title == 'menu') getMenu(setHeadMenu);
+  if(headMenu[0].title == 'menu') getMenu(siteUrl,setHeadMenu);
 
   useEffect(() => {},[headMenu]);
 
@@ -40,13 +40,13 @@ function Main({}) {
           </div>
 
           <div className="bodyContainer">
-            <Posts />
+            <Posts siteUrl = {siteUrl}/>
 
           </div>
         </div>
                        : false
     }
-    <SideMenu />
+    <SideMenu siteUrl = {siteUrl} />
     </>
   )
 }

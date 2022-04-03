@@ -1,9 +1,9 @@
-const getMenu = (funcState) => {
+const getMenu = (siteUrl,funcState) => {
   if(typeof funcState === 'function') {
-    
+
     let temp_array = [];
 
-    fetch('/myBlogWp/wp-json/wp/v2/menu')
+    fetch(`${siteUrl}/wp-json/wp/v2/menu`)
 
       .then(response => response.json())
       .then((data) => {

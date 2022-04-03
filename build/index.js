@@ -144,8 +144,9 @@ function Main(_ref) {
   const [headMenu, setHeadMenu] = Object(react__WEBPACK_IMPORTED_MODULE_1__["useState"])([{
     'title': 'menu'
   }]);
-  const siteUrl = 'http://localhost/myBlogWp/';
-  if (headMenu[0].title == 'menu') Object(_modules_Worker_js__WEBPACK_IMPORTED_MODULE_4__["default"])(setHeadMenu);
+  const siteUrl = 'http://localhost/myBlogWp/'; //Меняем на свой URL либо если на хостинге ставим тупо "/"
+
+  if (headMenu[0].title == 'menu') Object(_modules_Worker_js__WEBPACK_IMPORTED_MODULE_4__["default"])(siteUrl, setHeadMenu);
   Object(react__WEBPACK_IMPORTED_MODULE_1__["useEffect"])(() => {}, [headMenu]);
   return Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["Fragment"], null, Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])("div", {
     className: "headerMenu"
@@ -163,7 +164,11 @@ function Main(_ref) {
     onClick: () => Object(_modules_Worker_js__WEBPACK_IMPORTED_MODULE_4__["default"])()
   }, Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])("h1", null, "\u0414\u043E\u0431\u0440\u043E \u043F\u043E\u0436\u0430\u043B\u043E\u0432\u0430\u0442\u044C \u0432 \u043C\u043E\u0439 \u0443\u044E\u0442\u043D\u044B\u0439 \u0431\u043B\u043E\u0433."), Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])("p", null, "Welcome to easy dev.")), Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])("div", {
     className: "bodyContainer"
-  }, Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])(_modules_Posts_js__WEBPACK_IMPORTED_MODULE_2__["default"], null))) : false, Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])(_modules_SideMenu_js__WEBPACK_IMPORTED_MODULE_3__["default"], null));
+  }, Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])(_modules_Posts_js__WEBPACK_IMPORTED_MODULE_2__["default"], {
+    siteUrl: siteUrl
+  }))) : false, Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])(_modules_SideMenu_js__WEBPACK_IMPORTED_MODULE_3__["default"], {
+    siteUrl: siteUrl
+  }));
 }
 
 /* harmony default export */ __webpack_exports__["default"] = (Main);
@@ -188,14 +193,16 @@ __webpack_require__.r(__webpack_exports__);
 
 const Posts = _ref => {
   let {
+    siteUrl,
     page,
     setPage
   } = _ref;
   const [postsArray, setPostsArray] = Object(react__WEBPACK_IMPORTED_MODULE_1__["useState"])(['false']);
+  const [clickedPost, setClickedPost] = Object(react__WEBPACK_IMPORTED_MODULE_1__["useState"])('');
 
   const getPosts = () => {
     let temp_posts = [];
-    fetch('/myBlogWp/wp-json/wp/v2/posts').then(response => response.json()).then(data => {
+    fetch(`${siteUrl}/wp-json/wp/v2/posts`).then(response => response.json()).then(data => {
       for (let post of data) {
         temp_posts.push(post);
       }
@@ -213,32 +220,44 @@ const Posts = _ref => {
 
   if (postsArray[0] == 'false') getPosts();
   Object(react__WEBPACK_IMPORTED_MODULE_1__["useEffect"])(() => {}, [postsArray]);
+  Object(react__WEBPACK_IMPORTED_MODULE_1__["useEffect"])(() => {
+    console.log(clickedPost);
+  }, [clickedPost]);
   return Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["Fragment"], null, Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])("section", {
     className: "postsContainer"
   }, postsArray.map((item, index) => {
     var _item$title, _item$excerpt, _item$content;
 
     return Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])(Post, {
-      key: `keyPost_${index}`,
+      checkID: `keyPost_${item.id}`,
       title: item === null || item === void 0 ? void 0 : (_item$title = item.title) === null || _item$title === void 0 ? void 0 : _item$title.rendered,
       description: item === null || item === void 0 ? void 0 : (_item$excerpt = item.excerpt) === null || _item$excerpt === void 0 ? void 0 : _item$excerpt.rendered,
-      content: item === null || item === void 0 ? void 0 : (_item$content = item.content) === null || _item$content === void 0 ? void 0 : _item$content.rendered
+      content: item === null || item === void 0 ? void 0 : (_item$content = item.content) === null || _item$content === void 0 ? void 0 : _item$content.rendered,
+      clickedPost: clickedPost,
+      setClickedPost: setClickedPost
     });
   })));
 };
 
 const Post = _ref2 => {
   let {
-    key,
+    clickedPost,
+    setClickedPost,
+    checkID,
     description,
     title,
     content
   } = _ref2;
+  console.log(checkID);
+  Object(react__WEBPACK_IMPORTED_MODULE_1__["useEffect"])(() => {
+    console.log(clickedPost);
+  }, [clickedPost]);
   return Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])("article", {
-    className: "postBlock"
+    className: `postBlock ${clickedPost === checkID ? 'clickedPost' : ''}`,
+    onClick: evt => setClickedPost(checkID)
   }, Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])("h2", null, title), Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])("div", {
     dangerouslySetInnerHTML: {
-      __html: description
+      __html: clickedPost !== checkID ? description : content
     }
   }));
 };
@@ -266,20 +285,22 @@ __webpack_require__.r(__webpack_exports__);
 
 
 function SideMenu(_ref) {
-  let {} = _ref;
+  let {
+    siteUrl
+  } = _ref;
   const [sideMenu, setSideMenu] = Object(react__WEBPACK_IMPORTED_MODULE_1__["useState"])([{
     'title': 'menu'
   }]);
-  if (sideMenu[0].title == 'menu') Object(_Worker_js__WEBPACK_IMPORTED_MODULE_2__["default"])(setSideMenu);
+  if (sideMenu[0].title == 'menu') Object(_Worker_js__WEBPACK_IMPORTED_MODULE_2__["default"])(siteUrl, setSideMenu);
   return Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])("nav", {
     className: "sideMenu"
-  }, Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])("ul", null, sideMenu.map((item, index) => {
+  }, Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])("ul", null, sideMenu[0].title != 'menu' ? sideMenu.map((item, index) => {
     return Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])("li", {
       key: `sideMenuKey__${index}`
     }, Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])("a", {
       href: item.url
     }, item.title));
-  })));
+  }) : Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])("h3", null, "\u0417\u0430\u0433\u0440\u0443\u0437\u043A\u0430...")));
 }
 
 /* harmony default export */ __webpack_exports__["default"] = (SideMenu);
@@ -295,10 +316,10 @@ function SideMenu(_ref) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-const getMenu = funcState => {
+const getMenu = (siteUrl, funcState) => {
   if (typeof funcState === 'function') {
     let temp_array = [];
-    fetch('/myBlogWp/wp-json/wp/v2/menu').then(response => response.json()).then(data => {
+    fetch(`${siteUrl}/wp-json/wp/v2/menu`).then(response => response.json()).then(data => {
       for (let item of data) {
         temp_array.push(item);
       }
