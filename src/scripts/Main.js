@@ -4,7 +4,7 @@ import Posts from './modules/Posts.js'
 import SideMenu from './modules/SideMenu.js'
 import Header from './modules/Header.js'
 
-import getMenu from './modules/Worker.js'
+import getMenu , { getCategories , getComments } from './modules/Worker.js'
 
 function Main({}) {
 
@@ -50,12 +50,12 @@ function Main({}) {
                             </div>
 
                             <div className="bodyContainer">
-                              <Posts siteUrl = {siteUrl}/>
+                              <Posts getComments={getComments} page = {page} setPage = {setPage} siteUrl = {siteUrl}/>
                             </div>
                           </div>
                        : false
     }
-    <SideMenu siteUrl = {siteUrl} />
+    <SideMenu page = {page} setPage = {setPage} getMenu = {getMenu} getCategories = {getCategories} siteUrl = {siteUrl} />
     </>
   )
 }

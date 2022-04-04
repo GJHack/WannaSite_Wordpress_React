@@ -1,15 +1,28 @@
 import React, { useEffect , useState } from 'react'
 
-import getMenu from './Worker.js'
 
-function SideMenu({siteUrl}) {
+function SideMenu({ siteUrl , page , setPage , getMenu , getCategories}) {
 
   const [sideMenu, setSideMenu] = useState([{'title': 'menu'}]);
+  const [sideCategories, setSideCategories] = useState([{'name': 'menu'}]);
 
   if(sideMenu[0].title == 'menu') getMenu(siteUrl,setSideMenu);
+  if(sideCategories[0].name == 'menu') getCategories(siteUrl,setSideCategories);
+
+  useEffect(() => {},[sideCategories])
 
   return(
-    <nav className = "sideMenu">
+    <nav className = {`sideMenu ${(page == 'blog') ? 'activeSide' : 'noActiveSide'}`}>
+      <div className = {`sideMenuCategories`}>
+        {
+          (sideCategories[0].name != 'menu') ?
+            sideCategories.map((item, index) => {
+              return <a key = {`sideCatKey_${item.name}`} href = {'#'}>{item.name}</a>
+            })
+                                             :
+             <h3>Загрузка...</h3>
+        }
+      </div>
       <ul>
       {
         (sideMenu[0].title != 'menu') ?

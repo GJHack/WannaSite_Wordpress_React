@@ -5,6 +5,7 @@ body, html {
   position: absolute;
   display: block;
   overflow-x: hidden;
+  overflow-y: hidden;
   left: 0;
   top: 0;
   width: 100vw;
@@ -29,53 +30,47 @@ body, html {
   max-height: 100%;
 }
 .mainContainer {
-  padding-left: 20px;
-  padding-right: 20px;
+  width: 100%;
 }
 .sideMenu {
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
   position: fixed;
-  -ms-grid-row-align: center;
   align-self: center;
   top: 0;
-  right: 0;
   min-height: 100vh;
   min-width: 293px;
   background-color: #2d3049;
   padding: 2px;
+  transition: all .5s;
   overflow: hidden;
   user-select: none;
-
-    animation-name: fadeInSideMenu;
-    animation-duration: .5s;
-    animation-iteration-count: 1;
-
 }
-@keyframes fadeInSideMenu {
-  0% {
-    top: 25%;
-    border-radius: 50%;
-    max-height: 200px;
-    min-height: 200px;
-    max-width: 293px;
-    min-width: 293px;;
-  }
-  100% {
-    min-height: 100vh;
-    max-height: 100vh;
-    max-width: 293px;
-    min-width: 293px;
-    border-radius: 0;
-  }
+.sideMenuCategories {
+  display: flex;
+  flex-direction: row;
+}
+.sideMenuCategories a {
+  text-decoration: none;
+  color: #fff;
+}
+.sideMenuCategories a:not(:first-child) {
+  margin-left: 5px;
+}
+.activeSide {
+  right: 0;
+  box-shadow: 6px 0px 20px rgb(0, 0, 0);
+}
+.noActiveSide {
+  right: -300px;
 }
 .sideMenu ul {
   list-style-type: none;
   padding: 0;
   max-width: 88%;
-  position: absolute;
+  position: relative;
   left: 7%;
 }
 .sideMenu ul li a{
@@ -121,9 +116,11 @@ body, html {
   color: #fff;
   padding: 6px 10px;
   user-select: none;
+  border: 2px solid rgba(255, 255, 255, 0);
+  border-radius: 20px;
 }
 .headerMenuItem:hover {
-  border: 2px solid #fff;
+  border: 2px solid rgba(255, 255, 255, 1);
   border-radius: 20px;
 }
 .activeHeaderMenuItem {
@@ -165,17 +162,25 @@ body, html {
 .postsContainer {
   display: flex;
   flex-direction: column;
-  max-width: 40%;
+  max-width: 76.5%;
   padding-left: 20px;
+  overflow-y: scroll;
+  overflow-x: visible;
+  scrollbar-width: none;
+  max-height: 62vh;
 }
 .postBlock {
-  width: 100%;
+  width: 35%;
   padding: 2%;
   transition: all .3s;
-  min-width: 100%;
+  min-width: 62%;
   background-color: #2d3049;
   margin-top: 20px;
   cursor: pointer;
+
+  animation-name: fadeIn;
+  animation-duration: .5s;
+  animation-iteration-count: 1;
 }
 .postBlock h2 {
 	color: #E15665;
@@ -185,7 +190,7 @@ body, html {
   user-select: none;
 }
 .postBlock.clickedPost {
-  width: 150%;
+  width: 95.4%;
   background-color: #E15665;
   border-radius: 5px;
   cursor: default;
@@ -193,4 +198,22 @@ body, html {
 .postBlock.clickedPost h2 {
   color: #23263a;
   user-select: none;
+}
+
+
+@keyframes fadeIn {
+  0% {
+    filter: opacity(0);
+  }
+  100% {
+    filter: opacity(1);
+  }
+}
+@keyframes fadeInSideMenu {
+  0% {
+    right: -200px;
+  }
+  100% {
+    right: 0;
+  }
 }

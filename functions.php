@@ -23,17 +23,50 @@ function theme_support_setup(){
       ));
 }
 add_action('after_setup_theme','theme_support_setup');
-
 // Cоздаем кастомную функцию для получения меню навигации
-function custom_wp_menu() {
+function right_wp_menu() {
     // Заменить на наше название меню, ссылку или ID
     return wp_get_nav_menu_items('Меню слева');
 }
-
 // Создаем новый эндпоинт для роутера рест
 add_action( 'rest_api_init', function () {
     register_rest_route( 'wp/v2', 'menu', array(
         'methods' => 'GET',
-        'callback' => 'custom_wp_menu',
+        'callback' => 'right_wp_menu',
     ) );
+} );
+
+// регистрировать поле нужно во время события 'rest_api_init'!
+add_action( 'rest_api_init', function () {
+
+	// регистрируем REST поле
+	register_rest_field( 'comment', 'karma', array(
+
+		// функция вывода значения поля при ответе
+		'get_callback' => function( $comment_arr ) {
+			$comment_obj = get_comment( $comment_arr['id'] );
+			return (int) $comment_obj->comment_karma;
+		},
+
+		// функция обновления поля
+		'update_callback' => function( $karma, $comment_obj ) {
+			$ret = wp_update_comment( array(
+				'comment_ID'    => $comment_obj->comment_ID,
+				'comment_karma' => $karma
+			) );
+
+			if ( false === $ret ) {
+				return new WP_Error( 'rest_comment_karma_failed', __( 'Failed to update comment karma.' ), array( 'status' => 500 ) );
+			}
+			return true;
+		},
+
+		// описание поля в схеме
+		'schema' => array(
+			'description' => __( 'Comment karma.' ),
+			'type'        => 'integer'
+		),
+
+	) );
+
 } );

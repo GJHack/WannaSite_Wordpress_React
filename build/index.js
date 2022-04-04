@@ -169,8 +169,15 @@ function Main(_ref) {
   }, Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])("h1", null, "\u0414\u043E\u0431\u0440\u043E \u043F\u043E\u0436\u0430\u043B\u043E\u0432\u0430\u0442\u044C \u0432 \u043C\u043E\u0439 \u0443\u044E\u0442\u043D\u044B\u0439 \u0431\u043B\u043E\u0433."), Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])("p", null, "Welcome to easy dev.")), Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])("div", {
     className: "bodyContainer"
   }, Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])(_modules_Posts_js__WEBPACK_IMPORTED_MODULE_2__["default"], {
+    getComments: _modules_Worker_js__WEBPACK_IMPORTED_MODULE_5__["getComments"],
+    page: page,
+    setPage: setPage,
     siteUrl: siteUrl
   }))) : false, Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])(_modules_SideMenu_js__WEBPACK_IMPORTED_MODULE_3__["default"], {
+    page: page,
+    setPage: setPage,
+    getMenu: _modules_Worker_js__WEBPACK_IMPORTED_MODULE_5__["default"],
+    getCategories: _modules_Worker_js__WEBPACK_IMPORTED_MODULE_5__["getCategories"],
     siteUrl: siteUrl
   }));
 }
@@ -259,6 +266,7 @@ __webpack_require__.r(__webpack_exports__);
 const Posts = _ref => {
   let {
     siteUrl,
+    getComments,
     page,
     setPage
   } = _ref;
@@ -266,6 +274,7 @@ const Posts = _ref => {
   const [clickedPost, setClickedPost] = Object(react__WEBPACK_IMPORTED_MODULE_1__["useState"])('');
 
   const getPosts = () => {
+    //Хули это тут делает, перенести в Worker. Сейчас лень. Сасамба.
     let temp_posts = [];
     fetch(`${siteUrl}/wp-json/wp/v2/posts`).then(response => response.json()).then(data => {
       for (let post of data) {
@@ -285,22 +294,26 @@ const Posts = _ref => {
 
   if (postsArray[0] == false) getPosts();
   Object(react__WEBPACK_IMPORTED_MODULE_1__["useEffect"])(() => {}, [postsArray]);
-  Object(react__WEBPACK_IMPORTED_MODULE_1__["useEffect"])(() => {
-    console.log(clickedPost);
-  }, [clickedPost]);
+  Object(react__WEBPACK_IMPORTED_MODULE_1__["useEffect"])(() => {}, [clickedPost]);
   return Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["Fragment"], null, Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])("section", {
     className: "postsContainer"
   }, postsArray.map((item, index) => {
     var _item$title, _item$excerpt, _item$content;
 
-    return postsArray[0] ? Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])(Post, {
+    return postsArray[0] ? Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])("section", {
+      className: `postAndComments`
+    }, Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])(Post, {
       checkID: `keyPost_${item.id}`,
       title: item === null || item === void 0 ? void 0 : (_item$title = item.title) === null || _item$title === void 0 ? void 0 : _item$title.rendered,
       description: item === null || item === void 0 ? void 0 : (_item$excerpt = item.excerpt) === null || _item$excerpt === void 0 ? void 0 : _item$excerpt.rendered,
       content: item === null || item === void 0 ? void 0 : (_item$content = item.content) === null || _item$content === void 0 ? void 0 : _item$content.rendered,
       clickedPost: clickedPost,
       setClickedPost: setClickedPost
-    }) : Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])("h2", null, "\u0417\u0430\u0433\u0440\u0443\u0437\u043A\u0430...");
+    }), Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])(Comments, {
+      siteUrl: siteUrl,
+      getComments: getComments,
+      parentID: item.id
+    })) : Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])("h2", null, "\u0417\u0430\u0433\u0440\u0443\u0437\u043A\u0430...");
   })));
 };
 
@@ -327,6 +340,40 @@ const Post = _ref2 => {
   }));
 };
 
+const Comments = _ref3 => {
+  let {
+    siteUrl,
+    getComments,
+    parentID
+  } = _ref3;
+  const [comments, setComments] = Object(react__WEBPACK_IMPORTED_MODULE_1__["useState"])([false]);
+  if (comments[0] == false) getComments(siteUrl, setComments, parentID);
+
+  const likeComment = (id, karma) => {
+    //Хули это тут делает, перенести в Worker. Сейчас лень. Сасамба.
+    //ЛАЙКИ не работают
+    fetch(`${siteUrl}wp-json/wp/v2/comments?comment_ID=${id}?comment_karma=${1 + karma}`, {
+      'method': 'POST',
+      headers: {
+        'Authorization': 'Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE2NDkwODEwMDgsImVtYWlsIjoiZ2pkZXY5M0BnbWFpbC5jb20iLCJpZCI6MiwidXNlcm5hbWUiOiJteXNwb3QifQ.J0L5_ukqQdT5FGG6xEv_-jOkf20CqyuR2SGV0buifj8'
+      }
+    }).then(response => console.log(response.status)).then(data => {}).catch(err => {
+      console.log('Ошибка при лайке.');
+    });
+  };
+
+  return Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["Fragment"], null, comments.map((item, index) => {
+    return comments[0] ? Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])("div", {
+      className: `comment`,
+      onClick: () => likeComment(item.id, item.karma)
+    }, Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])("h5", null, item.author_name), Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])("h5", null, `Лайков: ${item.karma}`), Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])("p", {
+      dangerouslySetInnerHTML: {
+        '__html': item.content.rendered
+      }
+    })) : Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])("h2", null, "\u0417\u0430\u0433\u0440\u0443\u0437\u043A\u0430...");
+  }));
+};
+
 /* harmony default export */ __webpack_exports__["default"] = (Posts);
 
 /***/ }),
@@ -344,22 +391,36 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react */ "react");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_1__);
-/* harmony import */ var _Worker_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./Worker.js */ "./src/scripts/modules/Worker.js");
-
 
 
 
 function SideMenu(_ref) {
   let {
-    siteUrl
+    siteUrl,
+    page,
+    setPage,
+    getMenu,
+    getCategories
   } = _ref;
   const [sideMenu, setSideMenu] = Object(react__WEBPACK_IMPORTED_MODULE_1__["useState"])([{
     'title': 'menu'
   }]);
-  if (sideMenu[0].title == 'menu') Object(_Worker_js__WEBPACK_IMPORTED_MODULE_2__["default"])(siteUrl, setSideMenu);
+  const [sideCategories, setSideCategories] = Object(react__WEBPACK_IMPORTED_MODULE_1__["useState"])([{
+    'name': 'menu'
+  }]);
+  if (sideMenu[0].title == 'menu') getMenu(siteUrl, setSideMenu);
+  if (sideCategories[0].name == 'menu') getCategories(siteUrl, setSideCategories);
+  Object(react__WEBPACK_IMPORTED_MODULE_1__["useEffect"])(() => {}, [sideCategories]);
   return Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])("nav", {
-    className: "sideMenu"
-  }, Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])("ul", null, sideMenu[0].title != 'menu' ? sideMenu.map((item, index) => {
+    className: `sideMenu ${page == 'blog' ? 'activeSide' : 'noActiveSide'}`
+  }, Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])("div", {
+    className: `sideMenuCategories`
+  }, sideCategories[0].name != 'menu' ? sideCategories.map((item, index) => {
+    return Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])("a", {
+      key: `sideCatKey_${item.name}`,
+      href: '#'
+    }, item.name);
+  }) : Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])("h3", null, "\u0417\u0430\u0433\u0440\u0443\u0437\u043A\u0430...")), Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])("ul", null, sideMenu[0].title != 'menu' ? sideMenu.map((item, index) => {
     return Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])("li", {
       key: `sideMenuKey__${index}`
     }, Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])("a", {
@@ -376,12 +437,16 @@ function SideMenu(_ref) {
 /*!***************************************!*\
   !*** ./src/scripts/modules/Worker.js ***!
   \***************************************/
-/*! exports provided: default */
+/*! exports provided: getCategories, getComments, default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-const getMenu = (siteUrl, funcState) => {
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "getCategories", function() { return getCategories; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "getComments", function() { return getComments; });
+function getMenu(siteUrl, funcState) {
+  let catId = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : '';
+
   if (typeof funcState === 'function') {
     let temp_array = [];
     fetch(`${siteUrl}/wp-json/wp/v2/menu`).then(response => response.json()).then(data => {
@@ -396,8 +461,43 @@ const getMenu = (siteUrl, funcState) => {
       }, 5000);
     }).catch(e => console.log(e));
   }
-};
+}
 
+function getCategories(siteUrl, funcState) {
+  if (typeof funcState === 'function') {
+    let temp_array = [];
+    fetch(`${siteUrl}/wp-json/wp/v2/categories`).then(response => response.json()).then(data => {
+      for (let item of data) {
+        temp_array.push(item);
+      }
+
+      funcState(temp_array); //Пересмотреть таймер обновления
+
+      setTimeout(() => {
+        getMenu();
+      }, 5000);
+    }).catch(e => console.log(e));
+  }
+}
+function getComments(siteUrl, funcState) {
+  let idPost = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : 0;
+
+  if (typeof funcState === 'function') {
+    let temp_array = [];
+    fetch(`${siteUrl}/wp-json/wp/v2/comments?post=${idPost}`).then(response => response.json()).then(data => {
+      for (let item of data) {
+        temp_array.push(item);
+        console.log(item);
+      }
+
+      funcState(temp_array); //Пересмотреть таймер обновления
+
+      setTimeout(() => {
+        getMenu();
+      }, 5000);
+    }).catch(e => console.log(e));
+  }
+}
 /* harmony default export */ __webpack_exports__["default"] = (getMenu);
 
 /***/ }),
