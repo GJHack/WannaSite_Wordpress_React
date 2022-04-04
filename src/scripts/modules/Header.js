@@ -31,7 +31,7 @@ export default function Header({ siteUrl , getMenu , page , setPage , extraClass
                  headMenu.map((item,index) => {
                    return <a
                             href = {'#'}
-                            className = {`${ (item.desc == page) ? 'activeHeaderMenuItem' : 'headerMenuItem ' }`}
+                            className = {`headerMenuItem ${ (item.desc == page) ? 'activeHeaderMenuItem' : 'noActive' }`}
                             alt = {item.alt}
                             key = {item.id + "_KEY"}
                             onClick = {() => {item.action()}}

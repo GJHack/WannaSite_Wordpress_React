@@ -26,33 +26,33 @@ function Main({}) {
     {
       //Главная страница
       (page == 'main') ?
-        <div key = {`bodyKey_${page}`} className="mainContainer">
-          <div className="headerBlock" onClick={() => getMenu()}>
-            <h1>Добро пожаловать в мое портфолио</h1>
-            <p>Welcome to easy dev.</p>
-          </div>
+                          <div key = {`bodyKey_${page}`} className="mainContainer">
+                            <div className="headerBlock" onClick={() => getMenu()}>
+                              <h1>Добро пожаловать в мое портфолио</h1>
+                              <p>Welcome to easy dev.</p>
+                            </div>
 
-          <div className="bodyContainer">
+                            <div className="bodyContainer">
 
-          </div>
-        </div>
+                            </div>
+                          </div>
                        : false
+
     }
     {
       //Главная страница
       (page == 'blog') ?
-        <div key = {`bodyKey_${page}`} className="mainContainer">
-          <div className="headerBlock" onClick={() => getMenu()}>
-            <h1>Добро пожаловать в мой уютный блог.</h1>
+                          <div key = {`bodyKey_${page}`} className="mainContainer">
+                            <div className="headerBlock" onClick={() => getMenu()}>
+                              <h1>Добро пожаловать в мой уютный блог.</h1>
 
-            <p>Welcome to easy dev.</p>
-          </div>
+                              <p>Welcome to easy dev.</p>
+                            </div>
 
-          <div className="bodyContainer">
-            <Posts siteUrl = {siteUrl}/>
-
-          </div>
-        </div>
+                            <div className="bodyContainer">
+                              <Posts siteUrl = {siteUrl}/>
+                            </div>
+                          </div>
                        : false
     }
     <SideMenu siteUrl = {siteUrl} />

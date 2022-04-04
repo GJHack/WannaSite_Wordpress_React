@@ -40,7 +40,7 @@ body, html {
   -ms-grid-row-align: center;
   align-self: center;
   top: 0;
-  right: 100px;
+  right: 0;
   min-height: 100vh;
   min-width: 293px;
   background-color: #2d3049;
@@ -105,7 +105,7 @@ body, html {
   position: relative;
   transition: all .3s;
   text-decoration: none;
-  color: #333;
+  color: #fff;
   -webkit-user-select: none;
      -moz-user-select: none;
       -ms-user-select: none;
@@ -144,10 +144,22 @@ body, html {
 .headerMenuItem {
   transition: all .3s;
   text-decoration: none;
-  color: #333;
+  color: #fff;
+  padding: 6px 10px;
+  -webkit-user-select: none;
+     -moz-user-select: none;
+      -ms-user-select: none;
+          user-select: none;
+}
+.headerMenuItem:hover {
+  border: 2px solid #fff;
+  border-radius: 20px;
 }
 .activeHeaderMenuItem {
   background-color: #e15665;
+  border: none !important;
+  color: #fff;
+  border-radius: 20px;
 }
 .headerMenuItem:not(:first-child) {
   margin-left: 20px !important;
@@ -161,7 +173,7 @@ body, html {
   flex-direction: column;
   justify-content: center;
   align-items: flex-start;
-  position: relative;
+  position: absolute;
   left: 12px;
   background-color: #23263A;
   padding-left: 20px;
@@ -172,6 +184,7 @@ body, html {
       -ms-user-select: none;
           user-select: none;
   border-radius: 20px 0 0 20px;
+  top: 92px;
 }
 .bodyContainer {
   display: flex;
@@ -199,11 +212,25 @@ body, html {
 .postBlock h2 {
 	color: #E15665;
 }
+.postBlock p {
+  color: #fff;
+  -webkit-user-select: none;
+     -moz-user-select: none;
+      -ms-user-select: none;
+          user-select: none;
+}
 .postBlock.clickedPost {
   width: 150%;
   background-color: #E15665;
   border-radius: 5px;
   cursor: default;
+}
+.postBlock.clickedPost h2 {
+  color: #23263a;
+  -webkit-user-select: none;
+     -moz-user-select: none;
+      -ms-user-select: none;
+          user-select: none;
 }
 
 

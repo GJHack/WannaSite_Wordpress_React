@@ -228,7 +228,7 @@ function Header(_ref) {
   }, ((_headMenu$ = headMenu[0]) === null || _headMenu$ === void 0 ? void 0 : _headMenu$.title) != 'menu' ? headMenu.map((item, index) => {
     return Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])("a", {
       href: '#',
-      className: `${item.desc == page ? 'activeHeaderMenuItem' : 'headerMenuItem '}`,
+      className: `headerMenuItem ${item.desc == page ? 'activeHeaderMenuItem' : 'noActive'}`,
       alt: item.alt,
       key: item.id + "_KEY",
       onClick: () => {
@@ -262,7 +262,7 @@ const Posts = _ref => {
     page,
     setPage
   } = _ref;
-  const [postsArray, setPostsArray] = Object(react__WEBPACK_IMPORTED_MODULE_1__["useState"])(['false']);
+  const [postsArray, setPostsArray] = Object(react__WEBPACK_IMPORTED_MODULE_1__["useState"])([false]);
   const [clickedPost, setClickedPost] = Object(react__WEBPACK_IMPORTED_MODULE_1__["useState"])('');
 
   const getPosts = () => {
@@ -283,7 +283,7 @@ const Posts = _ref => {
     });
   };
 
-  if (postsArray[0] == 'false') getPosts();
+  if (postsArray[0] == false) getPosts();
   Object(react__WEBPACK_IMPORTED_MODULE_1__["useEffect"])(() => {}, [postsArray]);
   Object(react__WEBPACK_IMPORTED_MODULE_1__["useEffect"])(() => {
     console.log(clickedPost);
@@ -293,14 +293,14 @@ const Posts = _ref => {
   }, postsArray.map((item, index) => {
     var _item$title, _item$excerpt, _item$content;
 
-    return Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])(Post, {
+    return postsArray[0] ? Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])(Post, {
       checkID: `keyPost_${item.id}`,
       title: item === null || item === void 0 ? void 0 : (_item$title = item.title) === null || _item$title === void 0 ? void 0 : _item$title.rendered,
       description: item === null || item === void 0 ? void 0 : (_item$excerpt = item.excerpt) === null || _item$excerpt === void 0 ? void 0 : _item$excerpt.rendered,
       content: item === null || item === void 0 ? void 0 : (_item$content = item.content) === null || _item$content === void 0 ? void 0 : _item$content.rendered,
       clickedPost: clickedPost,
       setClickedPost: setClickedPost
-    });
+    }) : Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])("h2", null, "\u0417\u0430\u0433\u0440\u0443\u0437\u043A\u0430...");
   })));
 };
 

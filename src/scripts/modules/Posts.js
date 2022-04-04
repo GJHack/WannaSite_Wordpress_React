@@ -2,7 +2,7 @@ import React , { useEffect , useState } from 'react';
 
 const Posts = ({ siteUrl , page, setPage}) => {
 
-  const [postsArray, setPostsArray] = useState(['false']);
+  const [postsArray, setPostsArray] = useState([false]);
   const [clickedPost, setClickedPost] = useState('');
 
   const getPosts = () => {
@@ -34,7 +34,7 @@ const Posts = ({ siteUrl , page, setPage}) => {
       })
   }
 
-  if(postsArray[0] == 'false') getPosts();
+  if(postsArray[0] == false) getPosts();
 
   useEffect(()=>{},[postsArray])
   useEffect(() => {console.log(clickedPost)},[clickedPost])
@@ -44,14 +44,16 @@ const Posts = ({ siteUrl , page, setPage}) => {
       <section className = "postsContainer">
         {
           postsArray.map((item, index) => {
-            return <Post
-                         checkID = {`keyPost_${item.id}`}
-                         title = {item?.title?.rendered}
-                         description = {item?.excerpt?.rendered}
-                         content = {item?.content?.rendered}
-                         clickedPost = {clickedPost}
-                         setClickedPost = {setClickedPost}
-                   />
+            return (postsArray[0]) ?
+                                      <Post
+                                             checkID = {`keyPost_${item.id}`}
+                                             title = {item?.title?.rendered}
+                                             description = {item?.excerpt?.rendered}
+                                             content = {item?.content?.rendered}
+                                             clickedPost = {clickedPost}
+                                             setClickedPost = {setClickedPost}
+                                       />
+                                   : <h2>Загрузка...</h2>
           })
         }
       </section>
