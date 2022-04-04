@@ -128,7 +128,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_1__);
 /* harmony import */ var _modules_Posts_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./modules/Posts.js */ "./src/scripts/modules/Posts.js");
 /* harmony import */ var _modules_SideMenu_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./modules/SideMenu.js */ "./src/scripts/modules/SideMenu.js");
-/* harmony import */ var _modules_Worker_js__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./modules/Worker.js */ "./src/scripts/modules/Worker.js");
+/* harmony import */ var _modules_Header_js__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./modules/Header.js */ "./src/scripts/modules/Header.js");
+/* harmony import */ var _modules_Worker_js__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./modules/Worker.js */ "./src/scripts/modules/Worker.js");
+
 
 
 
@@ -136,32 +138,34 @@ __webpack_require__.r(__webpack_exports__);
 
 
 function Main(_ref) {
-  var _headMenu$;
-
   let {} = _ref;
   const [clickCount, setClickCount] = Object(react__WEBPACK_IMPORTED_MODULE_1__["useState"])(0);
   const [page, setPage] = Object(react__WEBPACK_IMPORTED_MODULE_1__["useState"])('main');
-  const [headMenu, setHeadMenu] = Object(react__WEBPACK_IMPORTED_MODULE_1__["useState"])([{
-    'title': 'menu'
-  }]);
   const siteUrl = 'http://localhost/myBlogWp/'; //Меняем на свой URL либо если на хостинге ставим тупо "/"
 
-  if (headMenu[0].title == 'menu') Object(_modules_Worker_js__WEBPACK_IMPORTED_MODULE_4__["default"])(siteUrl, setHeadMenu);
-  Object(react__WEBPACK_IMPORTED_MODULE_1__["useEffect"])(() => {}, [headMenu]);
-  return Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["Fragment"], null, Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])("div", {
-    className: "headerMenu"
-  }, ((_headMenu$ = headMenu[0]) === null || _headMenu$ === void 0 ? void 0 : _headMenu$.title) != 'menu' ? headMenu.map((item, index) => {
-    return Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])("a", {
-      href: item.url,
-      className: "headerMenuItem",
-      key: item.id + "_KEY"
-    }, item.title);
-  }) : Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])("h5", null, "\u0417\u0430\u0433\u0440\u0443\u0437\u043A\u0430...")), //Главная страница
+  Object(react__WEBPACK_IMPORTED_MODULE_1__["useEffect"])(() => {}, [page]);
+  return Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["Fragment"], null, Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])(_modules_Header_js__WEBPACK_IMPORTED_MODULE_4__["default"], {
+    siteUrl: siteUrl,
+    page: page,
+    setPage: setPage,
+    getMenu: _modules_Worker_js__WEBPACK_IMPORTED_MODULE_5__["default"],
+    extraClass: `header${page}`
+  }), //Главная страница
   page == 'main' ? Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])("div", {
+    key: `bodyKey_${page}`,
     className: "mainContainer"
   }, Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])("div", {
     className: "headerBlock",
-    onClick: () => Object(_modules_Worker_js__WEBPACK_IMPORTED_MODULE_4__["default"])()
+    onClick: () => Object(_modules_Worker_js__WEBPACK_IMPORTED_MODULE_5__["default"])()
+  }, Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])("h1", null, "\u0414\u043E\u0431\u0440\u043E \u043F\u043E\u0436\u0430\u043B\u043E\u0432\u0430\u0442\u044C \u0432 \u043C\u043E\u0435 \u043F\u043E\u0440\u0442\u0444\u043E\u043B\u0438\u043E"), Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])("p", null, "Welcome to easy dev.")), Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])("div", {
+    className: "bodyContainer"
+  })) : false, //Главная страница
+  page == 'blog' ? Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])("div", {
+    key: `bodyKey_${page}`,
+    className: "mainContainer"
+  }, Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])("div", {
+    className: "headerBlock",
+    onClick: () => Object(_modules_Worker_js__WEBPACK_IMPORTED_MODULE_5__["default"])()
   }, Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])("h1", null, "\u0414\u043E\u0431\u0440\u043E \u043F\u043E\u0436\u0430\u043B\u043E\u0432\u0430\u0442\u044C \u0432 \u043C\u043E\u0439 \u0443\u044E\u0442\u043D\u044B\u0439 \u0431\u043B\u043E\u0433."), Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])("p", null, "Welcome to easy dev.")), Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])("div", {
     className: "bodyContainer"
   }, Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])(_modules_Posts_js__WEBPACK_IMPORTED_MODULE_2__["default"], {
@@ -172,6 +176,67 @@ function Main(_ref) {
 }
 
 /* harmony default export */ __webpack_exports__["default"] = (Main);
+
+/***/ }),
+
+/***/ "./src/scripts/modules/Header.js":
+/*!***************************************!*\
+  !*** ./src/scripts/modules/Header.js ***!
+  \***************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return Header; });
+/* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @wordpress/element */ "@wordpress/element");
+/* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react */ "react");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_1__);
+
+
+function Header(_ref) {
+  var _headMenu$;
+
+  let {
+    siteUrl,
+    getMenu,
+    page,
+    setPage,
+    extraClass
+  } = _ref;
+  const [headMenu, setHeadMenu] = Object(react__WEBPACK_IMPORTED_MODULE_1__["useState"])([{
+    'title': 'Главная',
+    'desc': 'main',
+    'action': () => setPage('main'),
+    'alt': 'Переход на главную страницу',
+    'id': 0
+  }, {
+    'title': 'Блог',
+    'desc': 'blog',
+    'action': () => {
+      setPage('blog');
+    },
+    'alt': 'Переход в блог',
+    'id': 1
+  }]);
+  if (headMenu[0].title == 'menu') getMenu(siteUrl, setHeadMenu);
+  Object(react__WEBPACK_IMPORTED_MODULE_1__["useEffect"])(() => {}, [headMenu]);
+  Object(react__WEBPACK_IMPORTED_MODULE_1__["useEffect"])(() => {}, [page]);
+  return Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])("div", {
+    className: `headerMenu ${extraClass}`
+  }, ((_headMenu$ = headMenu[0]) === null || _headMenu$ === void 0 ? void 0 : _headMenu$.title) != 'menu' ? headMenu.map((item, index) => {
+    return Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])("a", {
+      href: '#',
+      className: `${item.desc == page ? 'activeHeaderMenuItem' : 'headerMenuItem '}`,
+      alt: item.alt,
+      key: item.id + "_KEY",
+      onClick: () => {
+        item.action();
+      }
+    }, " ", item.title, " ");
+  }) : Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])("h5", null, "\u0417\u0430\u0433\u0440\u0443\u0437\u043A\u0430..."));
+}
 
 /***/ }),
 

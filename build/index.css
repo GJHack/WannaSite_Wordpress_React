@@ -12,6 +12,7 @@ body, html {
   height: 100vh;
   min-height: 100vh;
   max-height: 100vh;
+  background-color: #23263a;
 }
 .app {
   position: relative;
@@ -37,22 +38,26 @@ body, html {
   justify-content: center;
   position: fixed;
   -ms-grid-row-align: center;
-      align-self: center;
+  align-self: center;
   top: 0;
   right: 100px;
   min-height: 100vh;
   min-width: 293px;
-  background-color: wheat;
+  background-color: #2d3049;
   padding: 2px;
   overflow: hidden;
+  -webkit-user-select: none;
+     -moz-user-select: none;
+      -ms-user-select: none;
+          user-select: none;
 
-  -webkit-animation-name: fadeInSideMenu;
+    -webkit-animation-name: fadeInSideMenu;
 
-          animation-name: fadeInSideMenu;
-  -webkit-animation-duration: .5s;
-          animation-duration: .5s;
-  -webkit-animation-iteration-count: 1;
-          animation-iteration-count: 1;
+            animation-name: fadeInSideMenu;
+    -webkit-animation-duration: .5s;
+            animation-duration: .5s;
+    -webkit-animation-iteration-count: 1;
+            animation-iteration-count: 1;
 
 }
 @-webkit-keyframes fadeInSideMenu {
@@ -101,6 +106,10 @@ body, html {
   transition: all .3s;
   text-decoration: none;
   color: #333;
+  -webkit-user-select: none;
+     -moz-user-select: none;
+      -ms-user-select: none;
+          user-select: none;
 }
 .sideMenu ul li a::after{
   position: absolute;
@@ -113,10 +122,10 @@ body, html {
 }
 .sideMenu ul li a:hover{
   text-decoration: none;
-  color: #515151;
+  color: #E15665;
 }
 .sideMenu ul li a:hover::after{
-    border-bottom: 2px solid #515151;
+    border-bottom: 2px solid #E15665;
     width: 100%;
 }
 .sideMenu ul li:not(:first-child){
@@ -137,11 +146,14 @@ body, html {
   text-decoration: none;
   color: #333;
 }
+.activeHeaderMenuItem {
+  background-color: #e15665;
+}
 .headerMenuItem:not(:first-child) {
   margin-left: 20px !important;
 }
 .headerBlock {
-  width: 100%;
+  width: 98.3%;
   max-width: 100%;
   min-height: 150px;
   max-height: 150px;
@@ -150,33 +162,48 @@ body, html {
   justify-content: center;
   align-items: flex-start;
   position: relative;
-  left: 0;
-  background-color: #e0cba6;
+  left: 12px;
+  background-color: #23263A;
   padding-left: 20px;
   max-width: 99%;
-  color: #333;
+  color: #fff;
+  -webkit-user-select: none;
+     -moz-user-select: none;
+      -ms-user-select: none;
+          user-select: none;
   border-radius: 20px 0 0 20px;
 }
 .bodyContainer {
   display: flex;
   flex-direction: row;
   justify-content: space-between;
+  position: absolute;
+  top: 262px;
+  left: 2px;
 }
 .postsContainer {
-	display: flex;
-	flex-direction: column;
-	max-width: 40%;
+  display: flex;
+  flex-direction: column;
+  max-width: 40%;
   padding-left: 20px;
 }
 .postBlock {
   width: 100%;
   padding: 2%;
   transition: all .3s;
+  min-width: 100%;
+  background-color: #2d3049;
+  margin-top: 20px;
+  cursor: pointer;
+}
+.postBlock h2 {
+	color: #E15665;
 }
 .postBlock.clickedPost {
   width: 150%;
-  background-color: #333;
-  color: #fff;
+  background-color: #E15665;
+  border-radius: 5px;
+  cursor: default;
 }
 
 

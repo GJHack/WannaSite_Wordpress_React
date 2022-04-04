@@ -2,6 +2,7 @@ import React, { useState , useEffect } from "react"
 
 import Posts from './modules/Posts.js'
 import SideMenu from './modules/SideMenu.js'
+import Header from './modules/Header.js'
 
 import getMenu from './modules/Worker.js'
 
@@ -9,30 +10,38 @@ function Main({}) {
 
   const [clickCount, setClickCount] = useState(0)
   const [page, setPage] = useState('main')
-  const [headMenu, setHeadMenu] = useState([{'title': 'menu'}])
 
   const siteUrl = 'http://localhost/myBlogWp/' //Меняем на свой URL либо если на хостинге ставим тупо "/"
 
-
-  if(headMenu[0].title == 'menu') getMenu(siteUrl,setHeadMenu);
-
-  useEffect(() => {},[headMenu]);
-
+  useEffect(() => {},[page])
   return (
     <>
-    <div className = "headerMenu">
-    {
-      (headMenu[0]?.title != 'menu') ?
-                 headMenu.map((item,index) => {
-                   return <a href = {item.url} className = "headerMenuItem" key = {item.id + "_KEY"}>{item.title}</a>
-                 })
-                 : <h5>Загрузка...</h5>
-    }
-    </div>
+      <Header
+              siteUrl = {siteUrl}
+              page = {page}
+              setPage = {setPage}
+              getMenu = {getMenu}
+              extraClass = {`header${page}`}
+      />
     {
       //Главная страница
       (page == 'main') ?
-        <div className="mainContainer">
+        <div key = {`bodyKey_${page}`} className="mainContainer">
+          <div className="headerBlock" onClick={() => getMenu()}>
+            <h1>Добро пожаловать в мое портфолио</h1>
+            <p>Welcome to easy dev.</p>
+          </div>
+
+          <div className="bodyContainer">
+
+          </div>
+        </div>
+                       : false
+    }
+    {
+      //Главная страница
+      (page == 'blog') ?
+        <div key = {`bodyKey_${page}`} className="mainContainer">
           <div className="headerBlock" onClick={() => getMenu()}>
             <h1>Добро пожаловать в мой уютный блог.</h1>
 
